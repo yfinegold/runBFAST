@@ -1,0 +1,5 @@
+GEE scripts to download Landsat 7 time series stack over an area of interest uploaded as a fusion table
+NDMI
+https://code.earthengine.google.com/215eebad0a550c7324f2d6b2557b406a
+NDVI
+https://code.earthengine.google.com/1cb30687f8c12e5ab2ca61dcd8e85df9
