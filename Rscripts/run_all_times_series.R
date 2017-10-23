@@ -1,25 +1,24 @@
-
-
 ## input data for BFAST scripts 
 
-
 # set data directory
-data_dir <- "~/BFAST_test/data/uganda/input/"
+data_dir <- "~/uga_degradation_2017/input/"
 
 # Forest mask, 1 is forest and 0 is nonforest
-mask_dir <- "~/uganda/sieved_maps/"
+mask_dir <- "~/uga_degradation_2017/mask/"
 forestmask_file <- 'sieved_LC_2010_forestmask.tif'
-forestmask <- paste0(mask_dir,forestmask_file) 
 # NDMI raster stack
-NDMIstack_file <- "time_series_stack_Kyanja.tif"
+NDMIstack_file <- "ndmi_time_series_stack_UGA_NW_2000_2017.tif"
 NDMIstack_input <- paste0(data_dir,NDMIstack_file) 
 
 # list of scene ID for each image in the raster stack
-NDMIsceneID_file <- paste0(data_dir,'time_series_scene_ids_Kyanja.csv')
+NDMIsceneID_file <- paste0(data_dir,'time_series_scene_ids_UGA_NW_2000_2017.csv')
+
 # NDVI raster image
-# NDVIstack <- paste0(data_dir,'All_NDVI_rci_20171009.tif')
-# # NDVI raster image
-# NDVIsceneID <- paste0(data_dir,'tableID_NDVI_rci_20171009.csv')
+NDVIstack_file <- "ndvi_time_series_stack_UGA_NW_2000_2017.tif"
+NDVIstack_input <- paste0(data_dir,NDVIstack_file) 
+
+# list of scene ID for each image in the raster stack
+NDVIsceneID_file <- paste0(data_dir,'ndvi_time_series_stack_UGA_NW_2000_2017.csv')
 
 # set results directory
 output_directory <-paste0("~/BFAST_test/data/uganda/results/",strsplit(NDMIstack_file,".tif"),"/")
@@ -46,11 +45,12 @@ source("~/BFAST_test/Rscripts/example_4.R")
 source("~/BFAST_test/Rscripts/example_5.R")
 source("~/BFAST_test/Rscripts/example_6.R")
 source("~/BFAST_test/Rscripts/example_7.R")
-# source("~/BFAST_test/Rscripts/example_8.R")
-# source("~/BFAST_test/Rscripts/example_9.R")
+source("~/BFAST_test/Rscripts/example_8.R")
+source("~/BFAST_test/Rscripts/example_9.R")
 source("~/BFAST_test/Rscripts/example_10.R")
 
 # compare reference data from the study area to the magnitude of change
 # source("~/BFAST_test/Rscripts/reference_data.R")
 # classification of magnitude of change based on standard deviation-- loops through all the results
 source("~/BFAST_test/Rscripts/magnitude_threshold.R")
+

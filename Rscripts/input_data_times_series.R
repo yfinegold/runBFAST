@@ -11,11 +11,12 @@ library(ggplot2)
 
 ## name of raster stack with 0 as no data
 NDMIstack_mask <- paste0(strsplit(NDMIstack_input,".tif"),"_masked.tif")
+NDVIstack_mask <- paste0(strsplit(NDVIstack_input,".tif"),"_masked.tif")
 
 
 
 NDMIstack_outputfile <- paste0(strsplit(NDMIstack_input,'.tif'),'0NA.tif')
-# NDVIstack_outputfile <- paste0(strsplit(NDVIstack,'.tif'),'0NA.tif')
+NDVIstack_outputfile <- paste0(strsplit(NDVIstack_input,'.tif'),'0NA.tif')
 
 # crop mask to AOI 
 # parameters
@@ -29,9 +30,9 @@ r.map1.xmax <- as.matrix(extent(r.map1))[3]
 r.map1.ymax <- as.matrix(extent(r.map1))[4]
 r.map1.xres <- res(r.map1)[1]
 r.map1.yres <- res(r.map1)[2]
-# r.map1.maxval <- maxValue(r.map1)
+r.map1.maxval <- maxValue(r.map1)
 # r.map1.maxval <- system(sprintf("oft-mm -um %s %s | grep 'Band 1 max = '",paste0(inputdir, map1), paste0(inputdir, map1)), intern = TRUE)
-# r.map1.maxval <- as.numeric(substring(r.map1.maxval,14))
+r.map1.maxval <- as.numeric(substring(r.map1.maxval,14))
 r.map1.proj <- as.character(projection(r.map1))
 # ?CRS
 # crs
@@ -48,7 +49,7 @@ r.map2.ymax <- as.matrix(extent(r.map2))[4]
 r.map2.xres <- res(r.map2)[1]
 r.map2.yres <- res(r.map2)[2]
 # r.map2.maxval <- system(sprintf("oft-mm -um %s %s | grep 'Band 1 max = '",paste0(inputdir, map2), paste0(inputdir, map2)), intern = TRUE)
-# r.map2.maxval <- as.numeric(substring(r.map2.maxval,14))
+r.map2.maxval <- as.numeric(substring(r.map2.maxval,14))
 r.map2.proj <- as.character(projection(r.map2))
 
 
@@ -107,6 +108,12 @@ system(sprintf("gdal_calc.py -A %s -B %s --A_band=1 --co COMPRESS=LZW --NoDataVa
                paste0(strsplit(NDMIstack_file,".tif"),"_masked.tif"),
                "(A*B)"
 ))
+system(sprintf("gdal_calc.py -A %s -B %s --A_band=1 --co COMPRESS=LZW --NoDataValue=0 --allBands=A --overwrite --outfile=%s --calc=\"%s\"",
+               NDVIstack_input,
+               paste0(data_dir, 'tmp_warp_',forestmask_file),
+               paste0(strsplit(NDVIstack_file,".tif"),"_masked.tif"),
+               "(A*B)"
+))
 
 # 
 # system(sprintf("gdal_calc.py -A %s -B %s --co COMPRESS=LZW --allBands=A --outfile=%s --calc=\"%s\"",
@@ -121,19 +128,19 @@ system(sprintf("gdal_translate -co COMPRESS=LZW  -a_nodata 0  %s %s",
                paste0(getwd(),'/',strsplit(NDMIstack_file,".tif"),"_masked.tif"),
                NDMIstack_outputfile
 ))
-# system(sprintf("gdal_translate -co COMPRESS=LZW -a_nodata 0 %s %s",
-#                NDVIstack,
-#                NDVIstack_outputfile
-# ))
+system(sprintf("gdal_translate -co COMPRESS=LZW -a_nodata 0 %s %s",
+               paste0(getwd(),'/',strsplit(NDVIstack_file,".tif"),"_masked.tif"),
+               NDVIstack_outputfile
+))
 
 
 ## read images as raster stack
 NDMIstack <- stack(NDMIstack_outputfile) 
-# NDVIstack <- stack(NDVIstack_outputfile)
+NDVIstack <- stack(NDVIstack_outputfile)
 
 ## read scene IDs
 NDMIsceneID <- read.csv(NDMIsceneID_file)
-# NDVIsceneID <- read.csv(NDVIsceneID)
+NDVIsceneID <- read.csv(NDVIsceneID_file)
 
 ## assign the scene id as the name for each band in the stack
 names(NDMIstack) <- NDMIsceneID$scene_id
@@ -153,19 +160,20 @@ nodup$date <- as.Date(as.numeric(julianday),  origin = paste0(year,"-01-01"))
 
 ## set date as Z in the raster stack
 ndmiStack <- setZ(ndmiStack,nodup$date)
-# 
-# ## remove duplicates
-# names(NDVIstack) <- NDVIsceneID$scene_id
-# scenes <- NDVIsceneID$scene_id
-# s <- as.data.frame(scenes)
-# s$scenes2 <- substr(scenes, 10, 16)
-# nodup <- s[!duplicated(s$scenes2),]
-# ndviStack<-subset(NDVIstack,nodup$scenes)
-# 
-# ## extract date of images
-# year <- substr(s$scenes2, 1,4)
-# julianday <- substr(s$scenes2, 5,8)
-# s$date <- as.Date(as.numeric(julianday),  origin = paste0(year,"-01-01"))
-# 
-# ## set date as Z in the raster stack
-# ndviStack <- setZ(ndviStack,s$date)
+
+## remove duplicates
+names(NDVIstack) <- NDVIsceneID$scene_id
+scenes <- NDVIsceneID$scene_id
+s <- as.data.frame(scenes)
+s$scenes2 <- substr(scenes, 10, 16)
+nodup <- s[!duplicated(s$scenes2),]
+ndviStack<-subset(NDVIstack,nodup$scenes)
+
+## extract date of images
+year <- substr(s$scenes2, 1,4)
+julianday <- substr(s$scenes2, 5,8)
+s$date <- as.Date(as.numeric(julianday),  origin = paste0(year,"-01-01"))
+
+## set date as Z in the raster stack
+ndviStack <- setZ(ndviStack,s$date)
+
