@@ -1,8 +1,9 @@
 # Example 3: ####
-source("~/BFAST_test/Rscripts/input_data.R")
+## modified from https://github.com/rosca002/FAO_Bfast_workshop/tree/master/tutorial
+
 example_title <- 3
-results_directory <- file.path(results_directory,paste0("example_",example_title))
-dir.create(results_directory)
+results_directory <- file.path(output_directory,paste0("example_",example_title))
+if(!dir.exists(results_directory)){dir.create(results_directory)}
 log_filename <- file.path(results_directory, paste0(format(Sys.time(), "%Y-%m-%d-%H-%M-%S"), "_example_", example_title, ".log"))
 start_time <- format(Sys.time(), "%Y/%m/%d %H:%M:%S")
 

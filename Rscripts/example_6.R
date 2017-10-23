@@ -1,8 +1,7 @@
 # Example 6: ####
-source("~/BFAST_test/Rscripts/input_data.R")
 example_title <- 6
-results_directory <- file.path(results_directory,paste0("example_",example_title))
-dir.create(results_directory)
+results_directory <- file.path(output_directory,paste0("example_",example_title))
+if(!dir.exists(results_directory)){dir.create(results_directory)}
 log_filename <- file.path(results_directory, paste0(format(Sys.time(), "%Y-%m-%d-%H-%M-%S"), "_example_", example_title, ".log"))
 start_time <- format(Sys.time(), "%Y/%m/%d %H:%M:%S")
 
