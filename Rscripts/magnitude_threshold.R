@@ -2,14 +2,15 @@
 ## bfast set threshold 
 ############
 # set working directory
-setwd(results_directory)
+setwd(output_directory)
 
 # read the tif files to be reclassified
 # first make an empty list
+?list.dirs
 fileslist <- list()
 # loop through all the folders and write the file names into the list
-for (i in 1:10){
-  files <- list.files(path=getwd(), pattern=paste0('example_',i,'.tif'), full.names=T, recursive=T)
+for (i in 1:length(list.dirs(path=output_directory, recursive= FALSE))){
+  files <- list.files(path=output_directory, pattern=paste0('example_',i,'.tif'), full.names=T, recursive=T)
   fileslist[[i]] <- files
 }
 # calculate the mean, standard deviation, minimum and maximum of the magnitude band
