@@ -39,9 +39,7 @@ r.map1.xmax <- as.matrix(extent(r.map1))[3]
 r.map1.ymax <- as.matrix(extent(r.map1))[4]
 r.map1.xres <- res(r.map1)[1]
 r.map1.yres <- res(r.map1)[2]
-r.map1.maxval <- maxValue(r.map1)
 # r.map1.maxval <- system(sprintf("oft-mm -um %s %s | grep 'Band 1 max = '",paste0(inputdir, map1), paste0(inputdir, map1)), intern = TRUE)
-r.map1.maxval <- as.numeric(substring(r.map1.maxval,14))
 r.map1.proj <- as.character(projection(r.map1))
 # ?CRS
 # crs
@@ -58,7 +56,6 @@ r.map2.ymax <- as.matrix(extent(r.map2))[4]
 r.map2.xres <- res(r.map2)[1]
 r.map2.yres <- res(r.map2)[2]
 # r.map2.maxval <- system(sprintf("oft-mm -um %s %s | grep 'Band 1 max = '",paste0(inputdir, map2), paste0(inputdir, map2)), intern = TRUE)
-r.map2.maxval <- as.numeric(substring(r.map2.maxval,14))
 r.map2.proj <- as.character(projection(r.map2))
 
 
