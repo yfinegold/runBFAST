@@ -13,6 +13,8 @@ library(ggplot2)
 if(!dir.exists(output_directory)){dir.create(output_directory)}
 setwd(output_directory)
 ## input file locations
+forestmask <- paste0(mask_dir,forestmask_file)
+
 NDVIsceneID_input<- paste0(data_dir, NDVIsceneID_file)
 NDVIstack_input <- paste0(data_dir,NDVIstack_file) 
 NDMIsceneID_input<- paste0(data_dir, NDMIsceneID_file)
