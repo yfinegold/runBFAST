@@ -1,29 +1,26 @@
 ## input data for BFAST scripts 
 
 # set data directory
-data_dir <- "~/uga_degradation_2017/input/"
+data_dir <- "~/runBFAST/input/"
 
 # Forest mask, 1 is forest and 0 is nonforest
-mask_dir <- "~/uga_degradation_2017/mask/"
+mask_dir <- "~/runBFAST/mask/"
 forestmask_file <- 'sieved_LC_2010_forestmask.tif'
 # NDMI raster stack
-NDMIstack_file <- "ndmi_time_series_stack_UGA_NW_2000_2017.tif"
-NDMIstack_input <- paste0(data_dir,NDMIstack_file) 
+NDMIstack_file <- "ndmi_time_series_stack_Kyanja.tif"
 
 # list of scene ID for each image in the raster stack
-NDMIsceneID_file <- paste0(data_dir,'time_series_scene_ids_UGA_NW_2000_2017.csv')
+NDMIsceneID_file <- 'ndmi_time_series_stack_Kyanja.csv'
 
 # NDVI raster image
-NDVIstack_file <- "ndvi_time_series_stack_UGA_NW_2000_2017.tif"
-NDVIstack_input <- paste0(data_dir,NDVIstack_file) 
+NDVIstack_file <- "ndvi_time_series_stack_Kyanja.tif"
 
 # list of scene ID for each image in the raster stack
-NDVIsceneID_file <- paste0(data_dir,'ndvi_time_series_stack_UGA_NW_2000_2017.csv')
+NDVIsceneID_file <- 'ndvi_time_series_stack_Kyanja.csv'
 
 # set results directory
-output_directory <-paste0("~/BFAST_test/data/uganda/results/",strsplit(NDMIstack_file,".tif"),"/")
-if(!dir.exists(output_directory)){dir.create(output_directory)}
-setwd(output_directory)
+output_directory <-paste0("~/runBFAST/results/",strsplit(NDMIstack_file,".tif"),"/")
+
 
 # beginning of historical period
 historical_year_beg <- 2000

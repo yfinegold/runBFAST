@@ -9,6 +9,14 @@ library(parallel)
 library(devtools)
 library(ggplot2)
 
+# set results directory
+if(!dir.exists(output_directory)){dir.create(output_directory)}
+setwd(output_directory)
+## input file locations
+NDVIsceneID_input<- paste0(data_dir, NDVIsceneID_file)
+NDVIstack_input <- paste0(data_dir,NDVIstack_file) 
+NDMIsceneID_input<- paste0(data_dir, NDMIsceneID_file)
+NDMIstack_input <- paste0(data_dir,NDMIstack_file) 
 ## name of raster stack with 0 as no data
 NDMIstack_mask <- paste0(strsplit(NDMIstack_input,".tif"),"_masked.tif")
 NDVIstack_mask <- paste0(strsplit(NDVIstack_input,".tif"),"_masked.tif")
@@ -17,7 +25,6 @@ NDVIstack_mask <- paste0(strsplit(NDVIstack_input,".tif"),"_masked.tif")
 
 NDMIstack_outputfile <- paste0(strsplit(NDMIstack_input,'.tif'),'0NA.tif')
 NDVIstack_outputfile <- paste0(strsplit(NDVIstack_input,'.tif'),'0NA.tif')
-
 # crop mask to AOI 
 # parameters
 resamp <- "near" #near (default), bilinear, cubic, cubicspline, lanczos, average, mode,  max, min, med, Q1, Q3
@@ -139,8 +146,8 @@ NDMIstack <- stack(NDMIstack_outputfile)
 NDVIstack <- stack(NDVIstack_outputfile)
 
 ## read scene IDs
-NDMIsceneID <- read.csv(NDMIsceneID_file)
-NDVIsceneID <- read.csv(NDVIsceneID_file)
+NDMIsceneID <- read.csv(NDMIsceneID_input)
+NDVIsceneID <- read.csv(NDVIsceneID_input)
 
 ## assign the scene id as the name for each band in the stack
 names(NDMIstack) <- NDMIsceneID$scene_id
