@@ -6,6 +6,7 @@ data_dir <- "~/runBFAST/input/"
 # Forest mask, 1 is forest and 0 is nonforest
 mask_dir <- "~/runBFAST/mask/"
 forestmask_file <- 'sieved_LC_2010_forestmask.tif'
+
 # NDMI raster stack
 NDMIstack_file <- "ndmi_time_series_stack_Kyanja.tif"
 
@@ -33,21 +34,21 @@ monitoring_year_end <- 2017
 # Run R scripts
 #################################
 # process input data
-source("~/BFAST_test/data/uganda/input_data_times_series.R")
+source("~/runBFAST/Rscripts/input_data_times_series.R")
 # run BFAST with 10 different parameters
-source("~/BFAST_test/Rscripts/example_1.R")
-source("~/BFAST_test/Rscripts/example_2.R")
-source("~/BFAST_test/Rscripts/example_3.R")
-source("~/BFAST_test/Rscripts/example_4.R")
-source("~/BFAST_test/Rscripts/example_5.R")
-source("~/BFAST_test/Rscripts/example_6.R")
-source("~/BFAST_test/Rscripts/example_7.R")
-source("~/BFAST_test/Rscripts/example_8.R")
-source("~/BFAST_test/Rscripts/example_9.R")
-source("~/BFAST_test/Rscripts/example_10.R")
+source("~/runBFAST/Rscripts/example_1.R")
+source("~/runBFAST/Rscripts/example_2.R")
+source("~/runBFAST/Rscripts/example_3.R")
+source("~/runBFAST/Rscripts/example_4.R")
+source("~/runBFAST/Rscripts/example_5.R")
+source("~/runBFAST/Rscripts/example_6.R")
+source("~/runBFAST/Rscripts/example_7.R")
+source("~/runBFAST/Rscripts/example_8.R")
+source("~/runBFAST/Rscripts/example_9.R")
+source("~/runBFAST/Rscripts/example_10.R")
 
 # compare reference data from the study area to the magnitude of change
 # source("~/BFAST_test/Rscripts/reference_data.R")
 # classification of magnitude of change based on standard deviation-- loops through all the results
-source("~/BFAST_test/Rscripts/magnitude_threshold.R")
+source("~/runBFAST/Rscripts/magnitude_threshold.R")
 
