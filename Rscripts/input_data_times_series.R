@@ -117,6 +117,10 @@ system(sprintf("gdal_calc.py -A %s -B %s --A_band=1 --co COMPRESS=LZW --NoDataVa
                paste0(strsplit(NDMIstack_file,".tif"),"_masked.tif"),
                "(A*B)"
 ))
+system(sprintf("gdal_translate -co COMPRESS=LZW  -a_nodata 0  %s %s",
+               paste0(getwd(),'/',strsplit(NDMIstack_file,".tif"),"_masked.tif"),
+               NDMIstack_outputfile
+))
 if(NDMI_only==1){
 system(sprintf("gdal_calc.py -A %s -B %s --A_band=1 --co COMPRESS=LZW --NoDataValue=0 --allBands=A --overwrite --outfile=%s --calc=\"%s\"",
                NDVIstack_input,
@@ -124,20 +128,25 @@ system(sprintf("gdal_calc.py -A %s -B %s --A_band=1 --co COMPRESS=LZW --NoDataVa
                paste0(strsplit(NDVIstack_file,".tif"),"_masked.tif"),
                "(A*B)"
 ))
-}
-}
-
-
-system(sprintf("gdal_translate -co COMPRESS=LZW  -a_nodata 0  %s %s",
-               paste0(getwd(),'/',strsplit(NDMIstack_file,".tif"),"_masked.tif"),
-               NDMIstack_outputfile
-))
-if(NDMI_only==1){
-  
 system(sprintf("gdal_translate -co COMPRESS=LZW -a_nodata 0 %s %s",
-               paste0(getwd(),'/',strsplit(NDVIstack_file,".tif"),"_masked.tif"),
-               NDVIstack_outputfile
-))
+                 paste0(getwd(),'/',strsplit(NDVIstack_file,".tif"),"_masked.tif"),
+                 NDVIstack_outputfile
+  ))
+}
+}else{
+  system(sprintf("gdal_translate -co COMPRESS=LZW  -a_nodata 0  %s %s",
+                 paste0(getwd(),'/',NDMIstack_file),
+                 NDMIstack_outputfile
+  ))
+  if(NDMI_only==1){
+  system(sprintf("gdal_translate -co COMPRESS=LZW -a_nodata 0 %s %s",
+                 paste0(getwd(),'/',NDVIstack_file),
+                 NDVIstack_outputfile
+  ))
+}
+}
+
+if(NDMI_only==1){
 NDVIstack <- stack(NDVIstack_outputfile)
 NDVIsceneID <- read.csv(NDVIsceneID_input)
 ## remove duplicates
