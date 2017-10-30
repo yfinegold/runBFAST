@@ -1,3 +1,5 @@
+## This script was created by Yelena Finegold and Sabina Rosca
+## contact: yelena.finegold@fao.org 
 ## input data for BFAST scripts 
 
 # set data directory
