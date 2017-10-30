@@ -9,13 +9,21 @@
 ## test BFAST
 ## load libraries
 options(stringsAsFactors = FALSE)
-library(raster)
-library(rgdal)
-library(bfastSpatial)
-library(stringr)
-library(parallel)
-library(devtools)
-library(ggplot2)
+packages <- function(x){
+  x <- as.character(match.call()[[2]])
+  if (!require(x,character.only=TRUE)){
+    install.packages(pkgs=x,repos="http://cran.r-project.org")
+    require(x,character.only=TRUE)
+  }
+}
+
+packages(raster)
+packages(rgdal)
+packages(bfastSpatial)
+packages(stringr)
+packages(parallel)
+packages(devtools)
+packages(ggplot2)
 
 # set results directory
 if(!dir.exists(output_directory)){dir.create(output_directory, recursive = T)}
