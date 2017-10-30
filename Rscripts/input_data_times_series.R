@@ -1,3 +1,11 @@
+###################################################################
+#######             Running BFAST Spatial                   ####### 
+#######      Scripts by Yelena Finegold and Sabina Rosca    #######       
+#######        contact: yelena.finegold@fao.org             ####### 
+#######         contact: sabina.rosca@wur.nl                ####### 
+#######             Script 2: prepare data                  ####### 
+###################################################################
+
 ## test BFAST
 ## load libraries
 options(stringsAsFactors = FALSE)
@@ -10,7 +18,7 @@ library(devtools)
 library(ggplot2)
 
 # set results directory
-if(!dir.exists(output_directory)){dir.create(output_directory)}
+if(!dir.exists(output_directory)){dir.create(output_directory, recursive = T)}
 setwd(output_directory)
 ## input file locations
 forestmask <- paste0(mask_dir,forestmask_file)
@@ -47,7 +55,7 @@ r.map1.proj <- as.character(projection(r.map1))
 # (strsplit(r.map1.proj,'+ellps='))
 # r.map1.proj
 # +proj=longlat +datum=WGS84 +no_defs'
-
+if(mask_data==1){
 r.map2 <- raster(forestmask)
 r.map2.xmin <- as.matrix(extent(r.map2))[1]
 r.map2.ymin <- as.matrix(extent(r.map2))[2]
@@ -94,19 +102,6 @@ if(proj_match==FALSE){
   
 }
 
-# system(sprintf("gdal_translate -a_nodata 0 -projwin %s %s %s %s -co COMPRESS=LZW -ot UInt16 %s %s",
-#                468798.817851,
-#                5093.3067275,
-#                485412.18759,
-#                -8906.72395118,
-#                paste0(data_dir, NDMIstack_file),
-#                paste0(data_dir, 'tmp_warp_',NDMIstack_file)
-# ))
-
-# system(sprintf("gdal_translate -b 1 -co INTERLEAVE=BAND %s %s",
-#                NDMIstack,
-#                paste0(data_dir, 'tmp_1band_',NDMIstack_file)
-# ))
 # mask out non-forest
 system(sprintf("gdal_calc.py -A %s -B %s --A_band=1 --co COMPRESS=LZW --NoDataValue=0 --allBands=A --overwrite --outfile=%s --calc=\"%s\"",
                NDMIstack_input,
@@ -114,39 +109,51 @@ system(sprintf("gdal_calc.py -A %s -B %s --A_band=1 --co COMPRESS=LZW --NoDataVa
                paste0(strsplit(NDMIstack_file,".tif"),"_masked.tif"),
                "(A*B)"
 ))
+if(NDMI_only==1){
 system(sprintf("gdal_calc.py -A %s -B %s --A_band=1 --co COMPRESS=LZW --NoDataValue=0 --allBands=A --overwrite --outfile=%s --calc=\"%s\"",
                NDVIstack_input,
                paste0(data_dir, 'tmp_warp_',forestmask_file),
                paste0(strsplit(NDVIstack_file,".tif"),"_masked.tif"),
                "(A*B)"
 ))
-
-# 
-# system(sprintf("gdal_calc.py -A %s -B %s --co COMPRESS=LZW --allBands=A --outfile=%s --calc=\"%s\"",
-#                NDMIstack,
-#                forestmask,
-#                NDMIstack_mask,
-#                "(A*B)"
-# ))
+}
+}
 
 
 system(sprintf("gdal_translate -co COMPRESS=LZW  -a_nodata 0  %s %s",
                paste0(getwd(),'/',strsplit(NDMIstack_file,".tif"),"_masked.tif"),
                NDMIstack_outputfile
 ))
+if(NDMI_only==1){
+  
 system(sprintf("gdal_translate -co COMPRESS=LZW -a_nodata 0 %s %s",
                paste0(getwd(),'/',strsplit(NDVIstack_file,".tif"),"_masked.tif"),
                NDVIstack_outputfile
 ))
+NDVIstack <- stack(NDVIstack_outputfile)
+NDVIsceneID <- read.csv(NDVIsceneID_input)
+## remove duplicates
+names(NDVIstack) <- NDVIsceneID$scene_id
+scenes <- NDVIsceneID$scene_id
+s <- as.data.frame(scenes)
+s$scenes2 <- substr(scenes, 10, 16)
+nodup <- s[!duplicated(s$scenes2),]
+ndviStack<-subset(NDVIstack,nodup$scenes)
 
+## extract date of images
+year <- substr(s$scenes2, 1,4)
+julianday <- substr(s$scenes2, 5,8)
+s$date <- as.Date(as.numeric(julianday),  origin = paste0(year,"-01-01"))
+
+## set date as Z in the raster stack
+ndviStack <- setZ(ndviStack,s$date)
+}
 
 ## read images as raster stack
 NDMIstack <- stack(NDMIstack_outputfile) 
-NDVIstack <- stack(NDVIstack_outputfile)
 
 ## read scene IDs
 NDMIsceneID <- read.csv(NDMIsceneID_input)
-NDVIsceneID <- read.csv(NDVIsceneID_input)
 
 ## assign the scene id as the name for each band in the stack
 names(NDMIstack) <- NDMIsceneID$scene_id
@@ -166,20 +173,3 @@ nodup$date <- as.Date(as.numeric(julianday),  origin = paste0(year,"-01-01"))
 
 ## set date as Z in the raster stack
 ndmiStack <- setZ(ndmiStack,nodup$date)
-
-## remove duplicates
-names(NDVIstack) <- NDVIsceneID$scene_id
-scenes <- NDVIsceneID$scene_id
-s <- as.data.frame(scenes)
-s$scenes2 <- substr(scenes, 10, 16)
-nodup <- s[!duplicated(s$scenes2),]
-ndviStack<-subset(NDVIstack,nodup$scenes)
-
-## extract date of images
-year <- substr(s$scenes2, 1,4)
-julianday <- substr(s$scenes2, 5,8)
-s$date <- as.Date(as.numeric(julianday),  origin = paste0(year,"-01-01"))
-
-## set date as Z in the raster stack
-ndviStack <- setZ(ndviStack,s$date)
-

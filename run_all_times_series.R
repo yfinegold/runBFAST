@@ -1,10 +1,21 @@
+###################################################################
+#######             Running BFAST Spatial                   ####### 
+#######      Scripts by Yelena Finegold and Sabina Rosca    #######       
+#######        contact: yelena.finegold@fao.org             ####### 
+#######         contact: sabina.rosca@wur.nl                ####### 
+#######             Script 1: set parameters                ####### 
+###################################################################
+
 ## input data for BFAST scripts 
 
 # set data directory
-data_dir <- "~/runBFAST/input/"
+data_dir <- "~/test_BFAST/"
+
+# set forest mask directory
+mask_dir <- "~/runBFAST/mask/"
 
 # Forest mask, 1 is forest and 0 is nonforest
-mask_dir <- "~/runBFAST/mask/"
+# forest mask file name
 forestmask_file <- 'sieved_LC_2010_forestmask.tif'
 
 # NDMI raster stack
@@ -20,7 +31,7 @@ NDVIstack_file <- "ndvi_time_series_stack_Kyanja.tif"
 NDVIsceneID_file <- 'ndvi_time_series_stack_Kyanja.csv'
 
 # set results directory
-output_directory <-paste0("~/runBFAST/results/",strsplit(NDMIstack_file,".tif"),"/")
+output_directory <-paste0(data_dir,"results/",strsplit(NDMIstack_file,".tif"),"/")
 
 
 # beginning of historical period
@@ -29,6 +40,16 @@ historical_year_beg <- 2000
 monitoring_year_beg <- 2010
 # end of monitoring period
 monitoring_year_end <- 2017
+
+# do you want to use a forest mask?
+# 1 = use a forest mask
+# 0 = do not use a forest mask
+mask_data <- 0
+
+# do you want to test only NDMI?
+# 1 = use NDMI and NDVI
+# 0 = use only NDMI
+NDMI_only <- 0
 
 #################################
 # Run R scripts
