@@ -135,12 +135,12 @@ system(sprintf("gdal_translate -co COMPRESS=LZW -a_nodata 0 %s %s",
 }
 }else{
   system(sprintf("gdal_translate -co COMPRESS=LZW  -a_nodata 0  %s %s",
-                 paste0(getwd(),'/',NDMIstack_file),
+                 NDMIstack_input,
                  NDMIstack_outputfile
   ))
   if(NDMI_only==1){
   system(sprintf("gdal_translate -co COMPRESS=LZW -a_nodata 0 %s %s",
-                 paste0(getwd(),'/',NDVIstack_file),
+                 NDVIstack_input,
                  NDVIstack_outputfile
   ))
 }
