@@ -1,10 +1,23 @@
 ###################################################################
 #######             Running BFAST Spatial                   ####### 
-#######      Scripts by Yelena Finegold and Sabina Rosca    #######       
-#######        contact: yelena.finegold@fao.org             ####### 
-#######         contact: sabina.rosca@wur.nl                ####### 
+#######   contributors: Yelena Finegold and Sabina Rosca    #######  
+#######           FAO Open Foris SEPAL project              #######
+#######   yelena.finegold@fao.org | sabina.rosca@wur.nl     ####### 
 #######             Script 1: set parameters                ####### 
 ###################################################################
+
+####################################################################################
+# FAO declines all responsibility for errors or deficiencies in the database or 
+# software or in the documentation accompanying it, for program maintenance and 
+# upgrading as well as for any # damage that may arise from them. FAO also declines 
+# any responsibility for updating the data and assumes no responsibility for errors 
+# and omissions in the data provided. Users are, however, kindly asked to report any 
+# errors or deficiencies in this product to FAO.
+####################################################################################
+
+####################################################################################
+## Last update: 2017/10/30
+####################################################################################
 
 ## input data for BFAST scripts 
 
