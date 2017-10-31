@@ -1,10 +1,10 @@
-###################################################################
-#######             Running BFAST Spatial                   ####### 
-#######   contributors: Yelena Finegold and Sabina Rosca    #######  
-#######           FAO Open Foris SEPAL project              #######
-#######   yelena.finegold@fao.org | sabina.rosca@wur.nl     ####### 
-#######             Script 1: set parameters                ####### 
-###################################################################
+####################################################################################
+##############                    Running BFAST Spatial               ############## 
+##############      contributors: Yelena Finegold and Sabina Rosca    ##############  
+##############              FAO Open Foris SEPAL project              ##############
+##############      yelena.finegold@fao.org | sabina.rosca@wur.nl     ############## 
+##############             Script 1: set parameters and run           ############## 
+####################################################################################
 
 ####################################################################################
 # FAO declines all responsibility for errors or deficiencies in the database or 
@@ -43,9 +43,6 @@ NDVIstack_file <- "ndvi_time_series_stack_Kyanja.tif"
 # list of scene ID for each image in the raster stack
 NDVIsceneID_file <- 'ndvi_time_series_stack_Kyanja.csv'
 
-# set results directory
-output_directory <-paste0(data_dir,"results/",strsplit(NDMIstack_file,".tif"),"/")
-
 
 # beginning of historical period
 historical_year_beg <- 2000
@@ -63,6 +60,9 @@ mask_data <- 0
 # 1 = use NDMI and NDVI
 # 0 = use only NDMI
 NDMI_only <- 0
+
+# set results directory
+output_directory <-paste0(data_dir,"results/",strsplit(NDMIstack_file,".tif"),"/")
 
 #################################
 # Run R scripts
