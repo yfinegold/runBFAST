@@ -25,7 +25,7 @@
 data_dir <- "~/test_BFAST/"
 
 # set forest mask directory
-mask_dir <- "~/runBFAST/mask/"
+mask_dir <- "~/runBFAST/example/mask/"
 
 # Forest mask, 1 is forest and 0 is nonforest
 # forest mask file name
