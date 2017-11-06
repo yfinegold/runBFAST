@@ -49,8 +49,8 @@ data_input <- c(paste0(c('ndmi_time_series_stack_','ndvi_time_series_stack_'),ba
 for(data in data_input){
   system(sprintf("drive pull %s",
                  data))
+  print(paste0('Trying to download ', data, ' from Google drive' ))
 }
-
 
 # beginning of historical period
 historical_year_beg <- 2000
