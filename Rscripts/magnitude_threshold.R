@@ -6,7 +6,6 @@ setwd(output_directory)
 
 # read the tif files to be reclassified
 # first make an empty list
-?list.dirs
 fileslist <- list()
 # loop through all the folders and write the file names into the list
 for (i in 1:length(list.dirs(path=output_directory, recursive= FALSE))){

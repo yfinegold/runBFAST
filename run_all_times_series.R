@@ -31,18 +31,29 @@ mask_dir <- "~/runBFAST/example/mask/"
 # forest mask file name
 forestmask_file <- 'sieved_LC_2010_forestmask.tif'
 
-# NDMI raster stack
-NDMIstack_file <- "ndmi_time_series_stack_Kyanja.tif"
+# basename for the raster stacks and CSV files
+# if the file is called ndmi_time_series_stack_Kyanja.tif the basename is Kyanja
+basename <- "menagesha"
 
-# list of scene ID for each image in the raster stack
-NDMIsceneID_file <- 'ndmi_time_series_stack_Kyanja.csv'
+####### Run the script: https://code.earthengine.google.com/bb245767014bc48657d121e1a8747098
 
-# NDVI raster image
-NDVIstack_file <- "ndvi_time_series_stack_Kyanja.tif"
+####### Upload data from Google Drive to SEPAL
+####### Example of autthorization key : 4/QHH2DucZ-MI-GY0HnG6JyEfjMpfVvJsu6_TmHqbxBgQ
+setwd(data_dir)
+system(sprintf("echo %s | drive init",
+               "PASTE THE AUTHORIZATION CODE HERE"))
 
-# list of scene ID for each image in the raster stack
-NDVIsceneID_file <- 'ndvi_time_series_stack_Kyanja.csv'
 
+system(sprintf("drive list"))
+data_input <- c(paste0(c('ndmi_time_series_stack_','ndvi_time_series_stack_'),basename,'.tif'),
+                paste0(c('ndmi_time_series_stack_','ndvi_time_series_stack_'),basename,'.csv')
+)
+
+for(data in data_input){
+  system(sprintf("drive pull %s",
+                 data))
+  print(paste0('Trying to download ', data, ' from Google drive' ))
+}
 
 # beginning of historical period
 historical_year_beg <- 2000
@@ -59,10 +70,10 @@ mask_data <- 0
 # do you want to test only NDMI?
 # 1 = use NDMI and NDVI
 # 0 = use only NDMI
-NDMI_only <- 0
+NDMI_only <- 1
 
 # set results directory
-output_directory <-paste0(data_dir,"results/",strsplit(NDMIstack_file,".tif"),"/")
+output_directory <-paste0(data_dir,"results/time_series_",basename,"/")
 
 #################################
 # Run R scripts

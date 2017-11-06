@@ -31,6 +31,12 @@ setwd(output_directory)
 ## input file locations
 forestmask <- paste0(mask_dir,forestmask_file)
 
+NDMIstack_file <-  data_input[1]
+NDVIstack_file <-  data_input[2]
+NDMIsceneID_file <-  data_input[3]
+NDVIsceneID_file <-  data_input[4]
+
+
 NDVIsceneID_input<- paste0(data_dir, NDVIsceneID_file)
 NDVIstack_input <- paste0(data_dir,NDVIstack_file) 
 NDMIsceneID_input<- paste0(data_dir, NDMIsceneID_file)
