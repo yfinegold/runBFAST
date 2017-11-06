@@ -24,12 +24,12 @@ mask_dir <- "~/runBFAST/example/mask/"
 forestmask_file <- 'sieved_LC_2010_forestmask.tif'
 
 
-######## if you data is already in your data directory enter the file name here
-######## otherwise use the code after to download the data directly from your google drive
-base <- 'Kyanja'
+# basename for the raster stacks and CSV files
+# if the file is called ndmi_time_series_stack_Kyanja.tif the basename is Kyanja
+basename <- "Menagesha"
 
 
-####### Google Earth Engine script : https://code.earthengine.google.com/68f81d93314b5f30aa1c5dfbf91aa88b
+####### Run the GEE script: https://code.earthengine.google.com/bb245767014bc48657d121e1a8747098
 
 ####### Transfer data from Google Drive to SEPAL
 ####### Example of authorization key : 4/QHH2DucZ-MI-GY0HnG6JyEfjMpfVvJsu6_TmHqbxBgQ
@@ -39,11 +39,11 @@ setwd(data_dir)
 system(sprintf("echo %s | drive init",
                "PASTE_THE_KEY_HERE"))
 
-system(sprintf("echo %s | drive init"))
+# system(sprintf("echo %s | drive init"))
 system(sprintf("drive list"))
 
-data_input <- c(paste0(c('ndmi_time_series_stack_','ndvi_time_series_stack_'),base,'.tif'),
-                paste0(c('ndmi_time_series_stack_','ndmi_time_series_stack_'),base,'.csv')
+data_input <- c(paste0(c('ndmi_time_series_stack_','ndvi_time_series_stack_'),basename,'.tif'),
+                paste0(c('ndmi_time_series_stack_','ndmi_time_series_stack_'),basename,'.csv')
 )
 
 for(data in data_input){
@@ -70,16 +70,7 @@ mask_data <- 0
 NDMI_only <- 0
 
 # set results directory
-output_directory <-paste0(data_dir,"results/",base,"/")
-
-# # NDMI raster stack
-NDMIstack_file <- paste0('ndmi_time_series_stack_',base,'.tif')
-# # list of scene ID for each image in the raster stack
-NDMIsceneID_file <- paste0('ndmi_time_series_stack_',base,'.csv')
-# # NDVI raster image
-NDVIstack_file <- paste0('ndvi_time_series_stack_',base,'.tif')
-# # list of scene ID for each image in the raster stack
-NDVIsceneID_file <- paste0('ndvi_time_series_stack_',base,'.csv')
+output_directory <-paste0(data_dir,"results/",basename,"/")
 
 #################################
 # Run R scripts
