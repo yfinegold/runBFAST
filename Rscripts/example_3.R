@@ -8,7 +8,8 @@ log_filename <- file.path(results_directory, paste0(format(Sys.time(), "%Y-%m-%d
 start_time <- format(Sys.time(), "%Y/%m/%d %H:%M:%S")
 
 result <- file.path(results_directory, paste0("example_", example_title, ".tif"))
-time <- system.time(bfmSpatial(ndmiStack, start = c(monitoring_year_beg, 1),
+time <- system.time(bfmSpatial(NDMIstack, start = c(monitoring_year_beg, 1),
+                               dates = dates,
                                formula = response ~ harmon,
                                order = 1, history = c(2005,1),
                                filename = result,

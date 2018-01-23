@@ -16,7 +16,7 @@ bfmSpatialSq <- function(start, end, timeStack, outdir, ...){
                       outfl
                     })
 }
-time <- system.time(bfmSpatialSq(monitoring_year_beg,monitoring_year_end,ndmiStack,results_directory, mc.cores = detectCores()))
+time <- system.time(bfmSpatialSq(monitoring_year_beg,monitoring_year_end,NDMIstack,results_directory, mc.cores = detectCores()))
 
 calcDefSeqYears2 <- function(outdir,outfile,start,end,parameter_value){
   bfast_result_fnames <- list.files(outdir, pattern=glob2rx('*.grd'), full.names=TRUE)

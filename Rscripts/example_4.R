@@ -14,9 +14,10 @@ subsetTimeStack <- function(timestack,year){
   result
 }
 
-ndmiStack_example_4 <- subsetTimeStack(ndmiStack,2005)
+ndmiStack_example_4 <- subsetTimeStack(NDMIstack,2005)
 
 time <- system.time(bfmSpatial(ndmiStack_example_4, start = c(monitoring_year_beg, 1),
+                               dates = dates,
                                formula = response ~ harmon,
                                order = 1, history = "all",
                                filename = result,
