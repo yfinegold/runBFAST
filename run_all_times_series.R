@@ -14,7 +14,8 @@
 ## input data for BFAST scripts 
 
 # set data directory
-data_dir <- '~/test_BFAST/'
+data_dir <- '/home/finegold/downloads/Ethiopia_BG_bamboo_testsite_again3/' # timeseries directory
+
 
 # set forest mask directory
 mask_dir <- "~/runBFAST/example/mask/"
@@ -24,33 +25,36 @@ mask_dir <- "~/runBFAST/example/mask/"
 forestmask_file <- 'sieved_LC_2010_forestmask.tif'
 
 
-# basename for the raster stacks and CSV files
-# if the file is called ndmi_time_series_stack_Kyanja.tif the basename is Kyanja
-basename <- "Menagesha"
-
-
-####### Run the GEE script: https://code.earthengine.google.com/bb245767014bc48657d121e1a8747098
-
-####### Transfer data from Google Drive to SEPAL
-####### Example of authorization key : 4/QHH2DucZ-MI-GY0HnG6JyEfjMpfVvJsu6_TmHqbxBgQ
-setwd(data_dir)
-## paste the long link into the browser, follow the instructions to connect to your google account
-## then copy the key and replace PASTE_THE_KEY_HERE with your authorization key
-system(sprintf("echo %s | drive init",
-               "PASTE_THE_KEY_HERE"))
-
-# system(sprintf("echo %s | drive init"))
-system(sprintf("drive list"))
-
-data_input <- c(paste0(c('ndmi_time_series_stack_','ndvi_time_series_stack_'),basename,'.tif'),
-                paste0(c('ndmi_time_series_stack_','ndmi_time_series_stack_'),basename,'.csv')
-)
-
-for(data in data_input){
-  system(sprintf("drive pull %s",
-                 data))
-  print(paste0('Trying to download ', data, ' from Google drive' ))
-}
+# # basename for the raster stacks and CSV files
+# # if the file is called ndmi_time_series_stack_Kyanja.tif the basename is Kyanja
+# basename <- "Menagesha"
+# 
+# 
+# ####### Run the GEE script: https://code.earthengine.google.com/bb245767014bc48657d121e1a8747098
+# 
+# ####### Transfer data from Google Drive to SEPAL
+# ####### Example of authorization key : 4/QHH2DucZ-MI-GY0HnG6JyEfjMpfVvJsu6_TmHqbxBgQ
+# 
+# setwd(data_dir)
+# ## paste the long link into the browser, follow the instructions to connect to your google account
+# ## then copy the key and replace PASTE_THE_KEY_HERE with your authorization key
+# system(sprintf("echo %s | drive init",
+#                "4/-RHV07YV7jM90vTZR2KfG-tdzd7lGuGgvgrjaGcR9bU"))
+# 
+# # system(sprintf("echo %s | drive init"))
+# system(sprintf("drive list"))
+# 
+# data_input <- c(paste0(c('ndmi_time_series_stack_','ndvi_time_series_stack_'),basename,'.tif'),
+#                 paste0(c('ndmi_time_series_stack_','ndmi_time_series_stack_'),basename,'.csv')
+# )
+# 
+# for(data in data_input){
+#   system(sprintf("drive pull %s",
+#                  data))
+# }
+# 
+dates <- unlist(read.csv(paste0(data_dir, '/1/dates.csv')))
+data_input <- paste0(data_dir, '/1/stack_1.vrt')
 
 # beginning of historical period
 historical_year_beg <- 2000
@@ -70,7 +74,7 @@ mask_data <- 0
 NDMI_only <- 0
 
 # set results directory
-output_directory <-paste0(data_dir,"results/",basename,"/")
+output_directory <-paste0(data_dir,"results/")
 
 #################################
 # Run R scripts
