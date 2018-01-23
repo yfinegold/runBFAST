@@ -31,30 +31,18 @@ setwd(output_directory)
 ## input file locations
 forestmask <- paste0(mask_dir,forestmask_file)
 
-NDMIstack_file <-  data_input[1]
-NDVIstack_file <-  data_input[2]
-NDMIsceneID_file <-  data_input[3]
-NDVIsceneID_file <-  data_input[4]
-
-
-NDVIsceneID_input<- paste0(data_dir, NDVIsceneID_file)
-NDVIstack_input <- paste0(data_dir,NDVIstack_file) 
-NDMIsceneID_input<- paste0(data_dir, NDMIsceneID_file)
-NDMIstack_input <- paste0(data_dir,NDMIstack_file) 
 ## name of raster stack with 0 as no data
-NDMIstack_mask <- paste0(strsplit(NDMIstack_input,".tif"),"_masked.tif")
-NDVIstack_mask <- paste0(strsplit(NDVIstack_input,".tif"),"_masked.tif")
+NDMIstack_mask <- paste0(strsplit(data_input,".tif"),"_masked.tif")
+# NDVIstack_mask <- paste0(strsplit(NDVIstack_input,".tif"),"_masked.tif")
 
-
-
-NDMIstack_outputfile <- paste0(strsplit(NDMIstack_input,'.tif'),'0NA.tif')
-NDVIstack_outputfile <- paste0(strsplit(NDVIstack_input,'.tif'),'0NA.tif')
+NDMIstack_outputfile <- paste0(strsplit(data_input,'.tif'),'0NA.tif')
+# NDVIstack_outputfile <- paste0(strsplit(NDVIstack_input,'.tif'),'0NA.tif')
 # crop mask to AOI 
 # parameters
 resamp <- "near" #near (default), bilinear, cubic, cubicspline, lanczos, average, mode,  max, min, med, Q1, Q3
 
 # step 1
-r.map1 <- raster(NDMIstack_input)
+r.map1 <- raster(data_input)
 r.map1.xmin <- as.matrix(extent(r.map1))[1]
 r.map1.ymin <- as.matrix(extent(r.map1))[2]
 r.map1.xmax <- as.matrix(extent(r.map1))[3]
@@ -63,9 +51,6 @@ r.map1.xres <- res(r.map1)[1]
 r.map1.yres <- res(r.map1)[2]
 # r.map1.maxval <- system(sprintf("oft-mm -um %s %s | grep 'Band 1 max = '",paste0(inputdir, map1), paste0(inputdir, map1)), intern = TRUE)
 r.map1.proj <- as.character(projection(r.map1))
-# ?CRS
-# crs
-# +proj=utm +zone=XX +datum=WGS84
 # (strsplit(r.map1.proj,'+ellps='))
 # r.map1.proj
 # +proj=longlat +datum=WGS84 +no_defs'
@@ -118,7 +103,7 @@ if(mask_data==1){
   
   # mask out non-forest
   system(sprintf("gdal_calc.py -A %s -B %s --A_band=1 --co COMPRESS=LZW --NoDataValue=0 --allBands=A --overwrite --outfile=%s --calc=\"%s\"",
-                 NDMIstack_input,
+                 data_input,
                  paste0(data_dir, 'tmp_warp_',forestmask_file),
                  paste0(strsplit(NDMIstack_file,".tif"),"_masked.tif"),
                  "(A*B)"
@@ -141,7 +126,7 @@ if(mask_data==1){
   }
 }else{
   system(sprintf("gdal_translate -co COMPRESS=LZW  -a_nodata 0  %s %s",
-                 NDMIstack_input,
+                 data_input,
                  NDMIstack_outputfile
   ))
   if(NDMI_only==1){
@@ -153,46 +138,8 @@ if(mask_data==1){
 }
 
 if(NDMI_only==1){
-  NDVIstack <- stack(NDVIstack_outputfile)
-  NDVIsceneID <- read.csv(NDVIsceneID_input)
-  ## remove duplicates
-  names(NDVIstack) <- NDVIsceneID$scene_id
-  scenes <- NDVIsceneID$scene_id
-  s <- as.data.frame(scenes)
-  s$scenes2 <- substr(scenes, 10, 16)
-  nodup <- s[!duplicated(s$scenes2),]
-  ndviStack<-subset(NDVIstack,nodup$scenes)
-  
-  ## extract date of images
-  year <- substr(s$scenes2, 1,4)
-  julianday <- substr(s$scenes2, 5,8)
-  s$date <- as.Date(as.numeric(julianday),  origin = paste0(year,"-01-01"))
-  
-  ## set date as Z in the raster stack
-  ndviStack <- setZ(ndviStack,s$date)
+  NDVIstack <- brick(NDVIstack_outputfile)
 }
 
 ## read images as raster stack
-NDMIstack <- stack(NDMIstack_outputfile) 
-
-## read scene IDs
-NDMIsceneID <- read.csv(NDMIsceneID_input)
-
-## assign the scene id as the name for each band in the stack
-names(NDMIstack) <- NDMIsceneID$scene_id
-
-## head(NDMIsceneID$scene_id)
-## remove duplicates
-scenes <- NDMIsceneID$scene_id
-s <- as.data.frame(scenes)
-s$scenes2 <- substr(scenes, 10, 16)
-nodup <- s[!duplicated(s$scenes2),]
-ndmiStack<-subset(NDMIstack,nodup$scenes)
-
-## extract date of images
-year <- substr(nodup$scenes2, 1,4)
-julianday <- substr(nodup$scenes2, 5,8)
-nodup$date <- as.Date(as.numeric(julianday),  origin = paste0(year,"-01-01"))
-
-## set date as Z in the raster stack
-ndmiStack <- setZ(ndmiStack,nodup$date)
+NDMIstack <- brick(NDMIstack_outputfile) 
