@@ -14,7 +14,7 @@
 ## input data for BFAST scripts 
 
 # set data directory
-data_dir <- '/home/finegold/downloads/Ethiopia_BG_bamboo_testsite_again3/' # timeseries directory
+data_dir <- '/home/finegold/downloads/ETH_kamashi/' # timeseries directory
 
 
 # set forest mask directory
@@ -54,16 +54,12 @@ forestmask_file <- 'sieved_LC_2010_forestmask.tif'
 # }
 # 
 dates <- unlist(read.csv(paste0(data_dir, '/1/dates.csv')))
-<<<<<<< HEAD
 data_input <- paste0(data_dir, '/1/stack.vrt')
-=======
-data_input <- paste0(data_dir, '/1/stack_1.vrt')
->>>>>>> eab24dce117f6b6ffb81cc2dffa37d90692ae260
 
 # beginning of historical period
-historical_year_beg <- 2000
+historical_year_beg <- 2008
 # beginning of monitoring period
-monitoring_year_beg <- 2010
+monitoring_year_beg <- 2013
 # end of monitoring period
 monitoring_year_end <- 2017
 

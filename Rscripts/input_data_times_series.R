@@ -24,6 +24,7 @@ packages(stringr)
 packages(parallel)
 packages(devtools)
 packages(ggplot2)
+set_fast_options() # Optional, but should give some speed up
 
 # set results directory
 if(!dir.exists(output_directory)){dir.create(output_directory, recursive = T)}
@@ -71,13 +72,13 @@ if(mask_data==1){
   proj_match <- r.map2.proj==r.map1.proj
   proj_match
   if(proj_match==FALSE){
-    system(sprintf("gdalwarp -t_srs \"%s\" -r %s -of GTiff -overwrite %s %s",
+    system(sprintf("gdalwarp -multi -wo NUM_THREADS=ALL_CPUS -t_srs \"%s\" -r %s -of GTiff -overwrite %s %s",
                    r.map2.proj,
                    resamp,
                    paste0(mask_dir, forestmask_file),
                    paste0(data_dir, 'tmp_reproj_',forestmask_file)
     ))
-    system(sprintf("gdalwarp -te %s %s %s %s -tr %s %s -tap -co COMPRESS=LZW -ot Byte -overwrite %s %s",
+    system(sprintf("gdalwarp -multi -wo NUM_THREADS=ALL_CPUS -te %s %s %s %s -tr %s %s -tap -co COMPRESS=LZW -ot Byte -overwrite %s %s",
                    r.map1.xmin,
                    r.map1.ymin,
                    r.map1.xmax,
@@ -88,7 +89,7 @@ if(mask_data==1){
                    paste0(data_dir, 'tmp_warp_',forestmask_file)
     ))
   }else{
-    system(sprintf("gdalwarp -te %s %s %s %s -tr %s %s -co COMPRESS=LZW -ot UInt16 -dstnodata 0 -overwrite %s %s",
+    system(sprintf("gdalwarp -multi -wo NUM_THREADS=ALL_CPUS -te %s %s %s %s -tr %s %s -co COMPRESS=LZW -ot UInt16 -dstnodata 0 -overwrite %s %s",
                    r.map1.xmin,
                    r.map1.ymin,
                    r.map1.xmax,
@@ -125,21 +126,21 @@ if(mask_data==1){
     ))
   }
 }else{
-  system(sprintf("gdal_translate -co COMPRESS=LZW  -a_nodata 0  %s %s",
-                 data_input,
-                 NDMIstack_outputfile
-  ))
+  # system(sprintf("gdal_translate -co COMPRESS=LZW  -a_nodata 0  %s %s",
+  #                data_input,
+  #                NDMIstack_outputfile
+  # ))
   if(NDMI_only==1){
-    system(sprintf("gdal_translate -co COMPRESS=LZW -a_nodata 0 %s %s",
-                   NDVIstack_input,
-                   NDVIstack_outputfile
-    ))
+    # system(sprintf("gdal_translate -co COMPRESS=LZW -a_nodata 0 %s %s",
+    #                NDVIstack_input,
+    #                NDVIstack_outputfile
+    # ))
   }
 }
 
 if(NDMI_only==1){
-  NDVIstack <- brick(NDVIstack_outputfile)
+  NDVIstack <- brick(NDVIstack_input)
 }
 
 ## read images as raster stack
-NDMIstack <- brick(NDMIstack_outputfile) 
+NDMIstack <- brick(data_input) 
