@@ -54,7 +54,11 @@ forestmask_file <- 'sieved_LC_2010_forestmask.tif'
 # }
 # 
 dates <- unlist(read.csv(paste0(data_dir, '/1/dates.csv')))
+<<<<<<< HEAD
 data_input <- paste0(data_dir, '/1/stack.vrt')
+=======
+data_input <- paste0(data_dir, '/1/stack_1.vrt')
+>>>>>>> eab24dce117f6b6ffb81cc2dffa37d90692ae260
 
 # beginning of historical period
 historical_year_beg <- 2000
