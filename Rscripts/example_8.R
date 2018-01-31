@@ -10,7 +10,7 @@ result <- file.path(results_directory, paste0("example_", example_title, ".tif")
 subsetTimeStack <- function(timestack,year){
   timespan <- which(timestack@z$time>as.Date(paste0(year,"-01-01"),"%Y-%m-%d"))
   result <- brick(timestack[[timespan]])
-  result@z$time <- timestack@z$time[timespan]
+  result@z$time <- dates
   result
 }
 
@@ -21,7 +21,7 @@ bfmSpatialSq <- function(start, end, timeStack, outdir, ...){
                     function(year){
                       outfl <- paste0(outdir, "/bfm_ndvi_", year, ".grd")
                       bfm_year <- bfmSpatial(timeStack, start = c(year, 1), monend = c(year + 1, 1), formula = response~harmon,
-                                             order = 1, history = "all", filename = outfl, ...)
+                                             dates = dates, order = 1, history = "all", filename = outfl, ...)
                       outfl
                     })
 }

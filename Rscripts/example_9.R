@@ -8,6 +8,7 @@ start_time <- format(Sys.time(), "%Y/%m/%d %H:%M:%S")
 
 result <- file.path(results_directory, paste0("example_", example_title, ".tif"))
 time <- system.time(bfmSpatial(ndviStack, start = c(monitoring_year_beg, 1),
+                               dates = dates,
                                formula = response ~ harmon,
                                order = 1, history = "all",
                                filename = result,

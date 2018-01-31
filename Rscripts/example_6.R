@@ -9,11 +9,11 @@ result <- file.path(results_directory, paste0("example_", example_title, ".tif")
 subsetTimeStack <- function(timestack,year){
   timespan <- which(timestack@z$time>as.Date(paste0(year,"-01-01"),"%Y-%m-%d"))
   result <- brick(timestack[[timespan]])
-  result@z$time <- timestack@z$time[timespan]
+  result@z$time <- dates
   result
 }
 
-ndmiStack_example_6 <- subsetTimeStack(ndmiStack,2008)
+ndmiStack_example_6 <- subsetTimeStack(NDMIstack,2008)
 
 bfmSpatialSq <- function(start, end, timeStack, outdir, ...){
   bfm_seq <- lapply(start:end,

@@ -11,12 +11,13 @@ bfmSpatialSq <- function(start, end, timeStack, outdir, ...){
                     function(year){
                       outfl <- paste0(outdir, "/bfm_NDMI_", year, ".grd")
                       bfm_year <- bfmSpatial(timeStack, start = c(year, 1), monend = c(year + 1, 1),
+                                             dates = dates,
                                              formula = response~harmon,
                                              order = 1, history = "all", filename = outfl, ...)
                       outfl
                     })
 }
-time <- system.time(bfmSpatialSq(monitoring_year_beg,monitoring_year_end,ndmiStack,results_directory, mc.cores = detectCores()))
+time <- system.time(bfmSpatialSq(monitoring_year_beg,monitoring_year_end,NDMIstack,results_directory, mc.cores = detectCores()))
 
 calcDefSeqYears2 <- function(outdir,outfile,start,end,parameter_value){
   bfast_result_fnames <- list.files(outdir, pattern=glob2rx('*.grd'), full.names=TRUE)
