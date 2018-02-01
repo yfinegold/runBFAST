@@ -13,12 +13,12 @@
 
 ## input data for BFAST scripts 
 # set data directory
-data_dir <- '/home/finegold/downloads/ETH_kamashi/' # timeseries directory
+data_dir <- '/home/finegold/downloads/TEST_BFAST/' # timeseries directory
 
 # beginning of historical period
-historical_year_beg <- 2008
+historical_year_beg <- 2010
 # beginning of monitoring period
-monitoring_year_beg <- 2013
+monitoring_year_beg <- 2014
 # end of monitoring period
 monitoring_year_end <- 2017
 
@@ -43,17 +43,12 @@ forestmask_file <- 'sieved_LC_2010_forestmask.tif'
 #################################
 # process input data
 source("~/runBFAST/Rscripts/input_data_times_series.R")
-# run BFAST with 10 different parameters
+# run BFAST with 4 different parameters
 source("~/runBFAST/Rscripts/example_1.R")
 source("~/runBFAST/Rscripts/example_2.R")
 source("~/runBFAST/Rscripts/example_3.R")
-source("~/runBFAST/Rscripts/example_4.R")
 source("~/runBFAST/Rscripts/example_5.R")
-source("~/runBFAST/Rscripts/example_6.R")
-source("~/runBFAST/Rscripts/example_7.R")
-source("~/runBFAST/Rscripts/example_8.R")
-source("~/runBFAST/Rscripts/example_9.R")
-source("~/runBFAST/Rscripts/example_10.R")
+
 
 # compare reference data from the study area to the magnitude of change
 # source("~/BFAST_test/Rscripts/reference_data.R")
