@@ -49,9 +49,7 @@ source("~/runBFAST/Rscripts/example_2.R")
 source("~/runBFAST/Rscripts/example_3.R")
 source("~/runBFAST/Rscripts/example_5.R")
 
-
 # compare reference data from the study area to the magnitude of change
 # source("~/BFAST_test/Rscripts/reference_data.R")
-# classification of magnitude of change based on standard deviation-- loops through all the results
-source("~/runBFAST/Rscripts/magnitude_threshold.R")
+
 
