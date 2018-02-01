@@ -9,7 +9,7 @@ result <- file.path(results_directory, paste0("example_", example_title, ".tif")
 bfmSpatialSq <- function(start, end, timeStack, outdir, ...){
   bfm_seq <- lapply(start:end,
                     function(year){
-                      outfl <- paste0(outdir, "/bfm_NDMI_", year, ".grd")
+                      outfl <- paste0(outdir, "/bfm_NDMI_", year, ".tif")
                       bfm_year <- bfmSpatial(timeStack, start = c(year, 1), monend = c(year + 1, 1),
                                              dates = dates,
                                              formula = response~harmon,
@@ -20,7 +20,7 @@ bfmSpatialSq <- function(start, end, timeStack, outdir, ...){
 time <- system.time(bfmSpatialSq(monitoring_year_beg,monitoring_year_end,NDMIstack,results_directory, mc.cores = detectCores()))
 
 calcDefSeqYears2 <- function(outdir,outfile,start,end,parameter_value){
-  bfast_result_fnames <- list.files(outdir, pattern=glob2rx('*.grd'), full.names=TRUE)
+  bfast_result_fnames <- list.files(outdir, pattern=glob2rx('*.tif'), full.names=TRUE)
   yearly_def <- lapply(bfast_result_fnames,function(file_name){
     bfm_year <- brick(file_name)
     bfm_year[[1]][bfm_year[[2]]>0] <- NA
@@ -34,45 +34,14 @@ calcDefSeqYears2 <- function(outdir,outfile,start,end,parameter_value){
   writeRaster(bfm_summary,file.path(outfile))
 }
 
-def_years_2005 <- calcDefSeqYears2(results_directory,result,monitoring_year_beg,2015,2005)
+def_years_2005 <- calcDefSeqYears2(results_directory,result,monitoring_year_beg,monitoring_year_end,historical_year_beg)
 plot(def_years_2005)
 write(paste0("This process started on ", start_time,
              " and ended on ",format(Sys.time(),"%Y/%m/%d %H:%M:%S"),
              " for a total time of ", time[[3]]/60," minutes"), log_filename, append=TRUE)
 plot(result)
+
 ## Post-processing ####
-bfm_ndmi <- brick(result)
-#### Change
-change <- raster(bfm_ndmi,1)
-plot(change, col=rainbow(8),breaks=c(monitoring_year_beg:monitoring_year_end))
-
-#### Magnitude
-magnitude <- raster(bfm_ndmi,2)
-magn_bkp <- magnitude
-magn_bkp[is.na(change)] <- NA
-plot(magn_bkp,breaks=c(-5:5*1000),col=rainbow(length(c(-5:5*1000))))
-plot(magnitude, breaks=c(-5:5*1000),col=rainbow(length(c(-5:5*1000))))
-plot(magnitude)
-#### Error
-error <- raster(bfm_ndmi,3)
-plot(error)
-
-#### Detect deforestation
-def_ndmi <- magn_bkp
-def_ndmi[def_ndmi>0]=NA
-plot(def_ndmi)
-plot(def_ndmi,col="black", main="NDMI_deforestation")
-writeRaster(def_ndmi,filename = file.path(results_directory,paste0("example_",example_title,"_deforestation_magnitude.grd")),overwrite=TRUE)
-writeRaster(def_ndmi,filename = file.path(results_directory,paste0("example_",example_title,"_deforestation_magnitude.tif")),overwrite=TRUE)
-
-def_years <- change
-def_years[is.na(def_ndmi)]=NA
-
-years <- c(monitoring_year_beg:monitoring_year_end)
-plot(def_years, col=rainbow(length(years)),breaks=years, main=paste0("Detecting deforestation after",monitoring_year_beg))
-writeRaster(def_years,filename = file.path(results_directory,paste0("example_",example_title,"_deforestation_dates.grd")),overwrite=TRUE)
-writeRaster(def_years,filename = file.path(results_directory,paste0("example_",example_title,"_deforestation_dates.tif")),overwrite=TRUE)
-
 # calculate the mean, standard deviation, minimum and maximum of the magnitude band
 # reclass the image into 10 classes
 # 0 = no data
