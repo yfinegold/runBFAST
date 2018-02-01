@@ -30,8 +30,14 @@ output_directory <-paste0(data_dir,"results/")
 if(!dir.exists(output_directory)){dir.create(output_directory, recursive = T)}
 setwd(output_directory)
 
-dates <- unlist(read.csv(paste0(data_dir, '/1/dates.csv')))
+dates <- unlist(read.csv(paste0(data_dir, '/1/dates.csv'),header = FALSE))
 data_input <- paste0(data_dir, '/1/stack.vrt')
+
+## Set a conditional statement to check if the available dates are within range of the parameter dates
+if(substr(dates[1],1,4)<=historical_year_beg &
+substr(tail(dates, n=1),1,4)>= monitoring_year_end){
+  print(paste0('Running BFAST'))
+
 
 ## name of raster stack with 0 as no data
 stack_outputfile <- paste0(strsplit(data_input,'.tif'),'0NA.tif')
@@ -114,3 +120,4 @@ if(mask_data==1){
 ## read images as raster stack
 NDMIstack <- brick(data_input) 
 }
+}else{print('ERROR. Check your dates for historical and monitoring year end, they are outside your available data range')}
