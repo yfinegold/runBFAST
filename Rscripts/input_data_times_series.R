@@ -23,6 +23,8 @@ packages(stringr)
 packages(parallel)
 packages(devtools)
 packages(ggplot2)
+packages(ncdf4)
+
 set_fast_options() # Optional, but should give some speed up
 
 # set results directory
@@ -34,11 +36,30 @@ dates <- unlist(read.csv(paste0(data_dir, '1/dates.csv'),header = FALSE))
 data_input_vrt <- paste0(data_dir, '1/stack.vrt')
 data_input <- paste0(data_dir, '1/stack.tif')
 
-## convert the VRT file to a TIF for faster processing
-system(sprintf("gdal_translate -co COMPRESS=LZW %s %s",
-               data_input_vrt,
-               data_input
-))
+# 
+# data_input_netcdf <- paste0(data_dir,paste('stacktif_netcdf.nc'))
+# 
+# system(sprintf("gdal_translate -of netCDF %s %s",
+#                data_input_vrt,
+#                data_input_netcdf))
+## convert the VRT file to a TIF for faster processing and write the process duration to a log file
+
+log_filename <- file.path(data_dir, paste0(format(Sys.time(), "%Y-%m-%d-%H-%M-%S"), "_gdalwarp",  ".log"))
+start_time <- format(Sys.time(), "%Y/%m/%d %H:%M:%S")
+
+# time <- system.time(system(sprintf("gdal_translate -co COMPRESS=LZW %s %s",
+#                                    data_input_vrt,
+#                                    data_input
+# )))
+## use gdal warp because it can run on multi cores
+time <- system.time(system(sprintf("gdalwarp -of GTiff -multi -wo NUM_THREADS=ALL_CPUS -co COMPRESS=LZW %s %s",
+                                   data_input_vrt,
+                                   data_input
+)))
+write(paste0("This gdalwarp process started on ", start_time,
+             " and ended on ",format(Sys.time(),"%Y/%m/%d %H:%M:%S"),
+             " for a total time of ", time[[3]]/60," minutes"), log_filename, append=TRUE)
+
 
 ## Set a conditional statement to check if the available dates are within range of the parameter dates
 if(substr(dates[1],1,4)<=historical_year_beg &

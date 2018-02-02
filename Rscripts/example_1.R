@@ -68,4 +68,14 @@ tryCatch({
       
   }, error=function(e){})
 
-
+# ## BFAST pixel on the output
+# plot(raster(result, band =2))
+# pixelResult = bfmPixel(
+#   NDMIstack,
+#   dates = dates,
+#   history = c(historical_year_beg, 1),
+#   start = c(monitoring_year_beg, 1),
+#   interactive= TRUE,
+#   # cell = 17000, # Can be tricky to pick a cell that got data
+#   plot = TRUE
+# )
