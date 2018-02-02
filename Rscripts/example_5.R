@@ -56,15 +56,12 @@ plot(result)
 # 9 = postive very large magnitude change  (mean + 4+ standard deviations)
 tryCatch({
   outputfile <- paste0(results_directory,"example_",example_title,'_threshold.tif')
-  means <- system(sprintf("gdalinfo -stats %s | grep 'STATISTICS_MEAN'",result), intern = TRUE)
-  means_b2 <- as.numeric(substring(means[2],21))
-  mins <- system(sprintf("gdalinfo -mm %s | grep 'Minimum'",result), intern = TRUE)
-  mins_b2 <- as.numeric(substring(str_split(mins[2], ', ',, simplify = TRUE )[1],11))
-  maxs_b2 <- as.numeric(substring(str_split(mins[2], ', ',, simplify = TRUE )[2],9))
-  stdevs <- system(sprintf("gdalinfo -stats %s | grep 'STATISTICS_STDDEV'",result), intern = TRUE)
-  stdevs_b2 <- as.numeric(substring(stdevs[2],23))
+  means_b2 <- cellStats( raster(result,band=2) , "mean") 
+  mins_b2 <- cellStats(raster(result,band=2) , "min")
+  maxs_b2 <- cellStats( raster(result,band=2) , "max")
+  stdevs_b2 <- cellStats( raster(result,band=2) , "sd")
   system(sprintf("gdal_calc.py -A %s --A_band=2 --co=COMPRESS=LZW --type=Byte --outfile=%s --calc='%s'
-                 ",
+                   ",
                  result,
                  outputfile,
                  paste0('(A<=',(maxs_b2),")*",
@@ -89,3 +86,15 @@ tryCatch({
   ))
   
 }, error=function(e){})
+
+# ## BFAST pixel on the output
+# plot(raster(result, band =2))
+# pixelResult = bfmPixel(
+#   NDMIstack,
+#   dates = dates,
+#   history = c(historical_year_beg, 1),
+#   start = c(monitoring_year_beg, 1),
+#   interactive= TRUE,
+#   # cell = 17000, # Can be tricky to pick a cell that got data
+#   plot = TRUE
+# )

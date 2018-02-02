@@ -32,15 +32,13 @@ write(paste0("This process started on ", start_time,
 # 7 = postive medium magnitude change      (mean + 3 standard deviations)
 # 8 = postive large magnitude change       (mean + 4 standard deviations)
 # 9 = postive very large magnitude change  (mean + 4+ standard deviations)
+
 tryCatch({
     outputfile <- paste0(results_directory,"example_",example_title,'_threshold.tif')
-    means <- system(sprintf("gdalinfo -stats %s | grep 'STATISTICS_MEAN'",result), intern = TRUE)
-    means_b2 <- as.numeric(substring(means[2],21))
-    mins <- system(sprintf("gdalinfo -mm %s | grep 'Minimum'",result), intern = TRUE)
-    mins_b2 <- as.numeric(substring(str_split(mins[2], ', ',, simplify = TRUE )[1],11))
-    maxs_b2 <- as.numeric(substring(str_split(mins[2], ', ',, simplify = TRUE )[2],9))
-    stdevs <- system(sprintf("gdalinfo -stats %s | grep 'STATISTICS_STDDEV'",result), intern = TRUE)
-    stdevs_b2 <- as.numeric(substring(stdevs[2],23))
+    means_b2 <- cellStats( raster(result,band=2) , "mean") 
+    mins_b2 <- cellStats(raster(result,band=2) , "min")
+    maxs_b2 <- cellStats( raster(result,band=2) , "max")
+    stdevs_b2 <- cellStats( raster(result,band=2) , "sd")
     system(sprintf("gdal_calc.py -A %s --A_band=2 --co=COMPRESS=LZW --type=Byte --outfile=%s --calc='%s'
                    ",
                    result,
