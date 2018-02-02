@@ -30,13 +30,20 @@ output_directory <-paste0(data_dir,"results/")
 if(!dir.exists(output_directory)){dir.create(output_directory, recursive = T)}
 setwd(output_directory)
 
-dates <- unlist(read.csv(paste0(data_dir, '/1/dates.csv'),header = FALSE))
-data_input <- paste0(data_dir, '/1/stack.vrt')
+dates <- unlist(read.csv(paste0(data_dir, '1/dates.csv'),header = FALSE))
+data_input_vrt <- paste0(data_dir, '1/stack.vrt')
+data_input <- paste0(data_dir, '1/stack.tif')
+
+## convert the VRT file to a TIF for faster processing
+system(sprintf("gdal_translate -co COMPRESS=LZW %s %s",
+               data_input_vrt,
+               data_input
+))
 
 ## Set a conditional statement to check if the available dates are within range of the parameter dates
 if(substr(dates[1],1,4)<=historical_year_beg &
 substr(tail(dates, n=1),1,4)>= monitoring_year_end){
-  print(paste0('Running BFAST'))
+  print(paste0('Setting parameters... '))
 
 
 ## name of raster stack with 0 as no data
@@ -121,3 +128,4 @@ if(mask_data==1){
 NDMIstack <- brick(data_input) 
 }
 }else{print('ERROR. Check your dates for historical and monitoring year end, they are outside your available data range')}
+
