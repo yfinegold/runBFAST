@@ -52,7 +52,7 @@ start_time <- format(Sys.time(), "%Y/%m/%d %H:%M:%S")
 #                                    data_input
 # )))
 ## use gdal warp because it can run on multi cores
-time <- system.time(system(sprintf("gdalwarp -of GTiff -multi -wo NUM_THREADS=ALL_CPUS -co COMPRESS=LZW %s %s",
+time <- system.time(system(sprintf("gdalwarp -of GTiff -multi -wo NUM_THREADS=ALL_CPUS -co BIGTIFF=YES -co COMPRESS=LZW %s %s",
                                    data_input_vrt,
                                    data_input
 )))
