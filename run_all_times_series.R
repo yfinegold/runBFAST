@@ -13,12 +13,12 @@
 
 ## input data for BFAST scripts 
 # set data directory
-data_dir <- '/home/finegold/downloads/TEST_BFAST/' # timeseries directory
+data_dir <- '/home/finegold/downloads/wesley_iran_test/' # timeseries directory
 
 # beginning of historical period
-historical_year_beg <- 2010
+historical_year_beg <- 2014
 # beginning of monitoring period
-monitoring_year_beg <- 2014
+monitoring_year_beg <- 2016
 # end of monitoring period
 monitoring_year_end <- 2017
 
@@ -41,6 +41,7 @@ forestmask_file <- 'sieved_LC_2010_forestmask.tif'
 #################################
 # Run R scripts
 #################################
+## if you runBFAST folder is not saved in your home directory, change the file path for these scripts to coorspond where you cloned the scripts
 # process input data
 source("~/runBFAST/Rscripts/input_data_times_series.R")
 # run BFAST with 4 different parameters
@@ -51,5 +52,3 @@ source("~/runBFAST/Rscripts/example_5.R")
 
 # compare reference data from the study area to the magnitude of change
 # source("~/BFAST_test/Rscripts/reference_data.R")
-
-
