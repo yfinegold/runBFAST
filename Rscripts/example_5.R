@@ -1,4 +1,10 @@
 # Example 5: ####
+## modified from https://github.com/rosca002/FAO_Bfast_workshop/tree/master/tutorial
+## BFAST settings
+# option: “all”
+# stack subset: no
+# option: Sequential monitoring period approach
+# Regression model: harmonic order 1
 
 for(i in list.dirs(data_dir, recursive=FALSE)){
   if(file.exists(paste0(i,'/','stack.vrt'))){
@@ -99,6 +105,34 @@ for(i in list.dirs(data_dir, recursive=FALSE)){
       ))
       
     }, error=function(e){})
+    ####################  CREATE A PSEUDO COLOR TABLE
+    ?col2
+    cols <- col2rgb(c("white","beige","yellow","orange","red","darkred","palegreen","green2","forestgreen",'darkgreen'))
+    colors()
+    pct <- data.frame(cbind(c(0:9),
+                            cols[1,],
+                            cols[2,],
+                            cols[3,]
+    ))
+    
+    write.table(pct,paste0(results_directory,"color_table.txt"),row.names = F,col.names = F,quote = F)
+    
+    
+    ################################################################################
+    ## Add pseudo color table to result
+    system(sprintf("(echo %s) | oft-addpct.py %s %s",
+                   paste0(results_directory,"color_table.txt"),
+                   paste0(results_directory,"tmp_example_",example_title,'_threshold.tif'),
+                   paste0(results_directory,"/","tmp_colortable.tif")
+    ))
+    ## Compress final result
+    system(sprintf("gdal_translate -ot byte -co COMPRESS=LZW %s %s",
+                   paste0(results_directory,"/","tmp_colortable.tif"),
+                   outputfile
+    ))
+    ## Clean all
+    system(sprintf(paste0("rm ",results_directory,"/","tmp*.tif")))
+    
   }}
 
 # ## BFAST pixel on the output

@@ -13,14 +13,14 @@
 
 ## input data for BFAST scripts 
 # set data directory
-data_dir <- '/home/finegold/downloads/wesley_iran_test/' # timeseries directory
+data_dir <- '/ram/laura_uganda_safe_TS/' # timeseries directory
 
 # beginning of historical period
-historical_year_beg <- 2014
+historical_year_beg <- 2010
 # beginning of monitoring period
-monitoring_year_beg <- 2016
+monitoring_year_beg <- 2014
 # end of monitoring period
-monitoring_year_end <- 2017
+monitoring_year_end <- 2018
 
 ##############################################
 ##       OPTIONAL SETTING             ########
@@ -45,7 +45,7 @@ forestmask_file <- 'sieved_LC_2010_forestmask.tif'
 # process input data
 source("~/runBFAST/Rscripts/input_data_times_series.R")
 # run BFAST with 4 different parameters
-source("~/runBFAST/Rscripts/example_1.R")
+# source("~/runBFAST/Rscripts/example_1.R")
 source("~/runBFAST/Rscripts/example_2.R")
 source("~/runBFAST/Rscripts/example_3.R")
 source("~/runBFAST/Rscripts/example_5.R")

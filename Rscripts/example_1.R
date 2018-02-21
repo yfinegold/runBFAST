@@ -1,5 +1,11 @@
 # Example 1: ####
 ## modified from https://github.com/rosca002/FAO_Bfast_workshop/tree/master/tutorial
+## BFAST settings
+# option: “all”
+# stack subset: no
+# option: Full monitoring period approach
+# Regression model: harmonic order 1
+
 for(i in list.dirs(data_dir, recursive=FALSE)){
   if(file.exists(paste0(i,'/','stack.vrt'))){
     print(paste0('BFASTing stack in: ', basename(i)))
@@ -13,7 +19,7 @@ for(i in list.dirs(data_dir, recursive=FALSE)){
     NDMIstack <- brick(data_input) 
     
     example_title <- 1
-    results_directory <- file.path(output_directory,paste0("example_",example_title,'/'))
+    results_directory <- file.path(output_directory,paste0("/example_",example_title,'/'))
     if(!dir.exists(results_directory)){dir.create(results_directory)}
     log_filename <- file.path(results_directory, paste0(format(Sys.time(), "%Y-%m-%d-%H-%M-%S"), "_example_", example_title, ".log"))
     start_time <- format(Sys.time(), "%Y/%m/%d %H:%M:%S")
@@ -53,7 +59,7 @@ for(i in list.dirs(data_dir, recursive=FALSE)){
       system(sprintf("gdal_calc.py -A %s --A_band=2 --co=COMPRESS=LZW --type=Byte --outfile=%s --calc='%s'
                    ",
                      result,
-                     outputfile,
+                     paste0(results_directory,"tmp_example_",example_title,'_threshold.tif'),
                      paste0('(A<=',(maxs_b2),")*",
                             '(A>',(means_b2+(stdevs_b2*4)),")*9+",
                             '(A<=',(means_b2+(stdevs_b2*4)),")*",
@@ -76,6 +82,33 @@ for(i in list.dirs(data_dir, recursive=FALSE)){
       ))
       
     }, error=function(e){})
+    
+    ####################  CREATE A PSEUDO COLOR TABLE
+    cols <- col2rgb(c("white","beige","yellow","orange","red","darkred","palegreen","green2","forestgreen",'darkgreen'))
+    colors()
+    pct <- data.frame(cbind(c(0:9),
+                            cols[1,],
+                            cols[2,],
+                            cols[3,]
+    ))
+    
+    write.table(pct,paste0(results_directory,"color_table.txt"),row.names = F,col.names = F,quote = F)
+    
+    
+    ################################################################################
+    ## Add pseudo color table to result
+    system(sprintf("(echo %s) | oft-addpct.py %s %s",
+                   paste0(results_directory,"color_table.txt"),
+                   paste0(results_directory,"tmp_example_",example_title,'_threshold.tif'),
+                   paste0(results_directory,"/","tmp_colortable.tif")
+    ))
+    ## Compress final result
+    system(sprintf("gdal_translate -ot byte -co COMPRESS=LZW %s %s",
+                   paste0(results_directory,"/","tmp_colortable.tif"),
+                   outputfile
+    ))
+    ## Clean all
+    system(sprintf(paste0("rm ",results_directory,"/","tmp*.tif")))
     
   }}
 
