@@ -23,7 +23,6 @@ library(raster)
 time_series_dir <- '~/downloads/suba/'
 # file with your point data
 fielddata_file <- '/home/finegold/degrad/natural_plantation_wgs84.shp'
-fielddata_file <- '/home/finegold/ethiopia/degrad/GIZ_data/natural_plantation_aktuell_wgs84.shp'
 
 # specify the beginning of the historical period and monitoring period
 monitoring_year_beg <- 2013
