@@ -2,7 +2,7 @@
 ####################################################################################################
 ## Run BFAST over multiple indeces and many points
 ## First download the timeseries for all the indeces of interest in SEPAL then save the time series in
-## one folder. This is the 'time_series_dir'
+## one folder, the 'time_series_dir'
 ## Contact yelena.finegold@fao.org
 ## 2018/08/11 
 ####################################################################################################
